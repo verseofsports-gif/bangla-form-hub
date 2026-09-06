@@ -172,13 +172,12 @@
   font-size: 0.9375rem;
   color: var(--foreground);
   border-radius: var(--radius);
-}
 
-@utility form-control {
   &:focus {
     outline: 2px solid var(--ring);
     outline-offset: -1px;
   }
+
   &:disabled {
     background-color: var(--muted);
     color: var(--muted-foreground);
