@@ -77,12 +77,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "সমর্থক ফরম" },
+      { name: "description", content: "অনলাইনে সমর্থক ফরম পূরণ করে আপনার তথ্য জমা দিন।" },
+      { name: "author", content: "সমর্থক নিবন্ধন কেন্দ্র" },
+      { property: "og:title", content: "সমর্থক ফরম" },
+      { property: "og:description", content: "অনলাইনে সমর্থক ফরম পূরণ করে আপনার তথ্য জমা দিন।" },
       { property: "og:type", content: "website" },
+
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
     ],
