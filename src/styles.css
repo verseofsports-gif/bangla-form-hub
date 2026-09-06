@@ -155,3 +155,32 @@
     color: var(--color-foreground);
   }
 }
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+  }
+}
+
+@utility form-control {
+  display: block;
+  width: 100%;
+  height: 2.5rem;
+  border: 1px solid var(--input);
+  background-color: var(--card);
+  padding-inline: 0.625rem;
+  font-size: 0.9375rem;
+  color: var(--foreground);
+  border-radius: var(--radius);
+}
+
+@utility form-control {
+  &:focus {
+    outline: 2px solid var(--ring);
+    outline-offset: -1px;
+  }
+  &:disabled {
+    background-color: var(--muted);
+    color: var(--muted-foreground);
+  }
+}
