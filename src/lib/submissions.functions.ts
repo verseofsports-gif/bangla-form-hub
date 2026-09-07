@@ -92,7 +92,37 @@ function serverPublicClient() {
 export const createSubmission = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => submissionSchema.parse(data))
   .handler(async ({ data }) => {
-    const { error } = await serverPublicClient().from("submissions").insert(data);
+    const permanent = composeAddress(
+      data.permanent_area ?? null,
+      data.permanent_thana ?? null,
+      data.permanent_district ?? null,
+    );
+    const row = {
+      name: data.name,
+      address: data.present_address,
+      phone: data.mobile,
+      email: data.email ?? "",
+      nationality: data.religion ?? null,
+      mobile: data.mobile,
+      whatsapp: data.whatsapp ?? null,
+      profession: data.institution,
+      present_address: composeAddress(data.present_area, data.present_thana, data.present_district),
+      permanent_address: permanent,
+      division: data.present_district,
+      message: data.reason ?? null,
+      additional_information: JSON.stringify({
+        পিতার_নাম: data.father_name ?? null,
+        শিক্ষা_প্রতিষ্ঠান: data.institution,
+        ক্লাস_শ্রেণি_বর্ষ: data.class_level,
+        বিষয়_বিভাগ: data.subject,
+        ধর্ম: data.religion ?? null,
+        ফেসবুক_আইডি: data.facebook ?? null,
+        পূর্বে_যুক্ত_ছিলেন: data.participated_before ?? null,
+        সরাসরি_যুক্ত_হতে_চান: data.join_org ?? null,
+      }),
+      consent: true as const,
+    };
+    const { error } = await serverPublicClient().from("submissions").insert(row);
     if (error) throw new Error("সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।");
     return { ok: true as const };
   });
