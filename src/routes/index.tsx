@@ -192,7 +192,7 @@ function SupporterForm() {
                 value={fields.profession}
                 onChange={(e) => set("profession", e.target.value)}
               >
-                <option value="">select</option>
+                <option value="">নির্বাচন করুন</option>
                 {professions.map((p) => (
                   <option key={p} value={p}>
                     {p}
@@ -232,7 +232,7 @@ function SupporterForm() {
                     onChange={(e) => set("division", e.target.value)}
                     required
                   >
-                    <option value="">select</option>
+                    <option value="">নির্বাচন করুন</option>
                     {divisions.map((d) => (
                       <option key={d} value={d}>
                         {d}
