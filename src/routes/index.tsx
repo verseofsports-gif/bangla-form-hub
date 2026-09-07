@@ -37,9 +37,7 @@ const divisions = [
 
 const professions = ["ছাত্র/ছাত্রী", "চাকরিজীবী", "ব্যবসায়ী", "কৃষক", "শিক্ষক", "গৃহিণী", "অন্যান্য"];
 
-type Fields = Record<string, string>;
-
-const initial: Fields = {
+const initial = {
   name: "",
   address: "",
   phone: "",
@@ -56,6 +54,9 @@ const initial: Fields = {
   message: "",
 };
 
+type Fields = typeof initial;
+type FieldKey = keyof Fields;
+
 function SupporterForm() {
   const submit = useServerFn(createSubmission);
   const [fields, setFields] = useState<Fields>(initial);
@@ -64,7 +65,7 @@ function SupporterForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
 
-  const set = (key: string, value: string) => {
+  const set = (key: FieldKey, value: string) => {
     setFields((prev) => {
       const next = { ...prev, [key]: value };
       if (key === "present_address" && sameAsPrevious) next.permanent_address = value;
@@ -144,12 +145,12 @@ function SupporterForm() {
           </aside>
 
           <div className="space-y-4">
-            <Field label="নাম" required value={fields["name"]!} onChange={(v) => set("name", v)} />
-            <Field label="ঠিকানা" value={fields["address"]!} onChange={(v) => set("address", v)} />
+            <Field label="নাম" required value={fields.name} onChange={(v) => set("name", v)} />
+            <Field label="ঠিকানা" value={fields.address} onChange={(v) => set("address", v)} />
             <Field
               label="ফোন নম্বর"
               required
-              value={fields["phone"]!}
+              value={fields.phone}
               onChange={(v) => set("phone", v)}
               inputMode="tel"
             />
@@ -157,30 +158,30 @@ function SupporterForm() {
               label="ই-মেইল"
               required
               type="email"
-              value={fields["email"]!}
+              value={fields.email}
               onChange={(v) => set("email", v)}
             />
             <Field
               label="জাতীয়তা"
-              value={fields["nationality"]!}
+              value={fields.nationality}
               onChange={(v) => set("nationality", v)}
             />
             <Field
               label="জন্মতারিখ"
               type="date"
-              value={fields["date_of_birth"]!}
+              value={fields.date_of_birth}
               onChange={(v) => set("date_of_birth", v)}
             />
             <Field
               label="মোবাইল নম্বর"
               required
-              value={fields["mobile"]!}
+              value={fields.mobile}
               onChange={(v) => set("mobile", v)}
               inputMode="tel"
             />
             <Field
               label="WhatsApp নম্বর"
-              value={fields["whatsapp"]!}
+              value={fields.whatsapp}
               onChange={(v) => set("whatsapp", v)}
               inputMode="tel"
             />
@@ -188,7 +189,7 @@ function SupporterForm() {
               <FieldLabel label="পেশা/পরিচয়" />
               <select
                 className="form-control"
-                value={fields["profession"]!}
+                value={fields.profession}
                 onChange={(e) => set("profession", e.target.value)}
               >
                 <option value="">select</option>
@@ -205,12 +206,12 @@ function SupporterForm() {
               <div className="space-y-4">
                 <Field
                   label="বর্তমান ঠিকানা"
-                  value={fields["present_address"]!}
+                  value={fields.present_address}
                   onChange={(v) => set("present_address", v)}
                 />
                 <Field
                   label="স্থায়ী ঠিকানা"
-                  value={fields["permanent_address"]!}
+                  value={fields.permanent_address}
                   onChange={(v) => set("permanent_address", v)}
                   disabled={sameAsPrevious}
                 />
@@ -227,7 +228,7 @@ function SupporterForm() {
                   <FieldLabel label="বিভাগ" required />
                   <select
                     className="form-control"
-                    value={fields["division"]!}
+                    value={fields.division}
                     onChange={(e) => set("division", e.target.value)}
                     required
                   >
@@ -246,7 +247,7 @@ function SupporterForm() {
               <FieldLabel label="অতিরিক্ত তথ্য" />
               <textarea
                 className="form-control min-h-24 py-2"
-                value={fields["additional_information"]!}
+                value={fields.additional_information}
                 onChange={(e) => set("additional_information", e.target.value)}
                 maxLength={2000}
               />
@@ -255,7 +256,7 @@ function SupporterForm() {
               <FieldLabel label="আপনার মন্তব্য/বার্তা" />
               <textarea
                 className="form-control min-h-24 py-2"
-                value={fields["message"]!}
+                value={fields.message}
                 onChange={(e) => set("message", e.target.value)}
                 maxLength={2000}
               />
@@ -291,7 +292,7 @@ function SupporterForm() {
   );
 }
 
-function FieldLabel({ label, required }: { label: string; required?: boolean }) {
+function FieldLabel({ label, required }: { label: string; required?: boolean | undefined }) {
   return (
     <span className="mb-1 block text-sm">
       {label} {required ? <span className="text-required">*</span> : null}
@@ -311,10 +312,10 @@ function Field({
   label: string;
   value: string;
   onChange: (value: string) => void;
-  required?: boolean;
-  type?: string;
-  inputMode?: "tel" | "text";
-  disabled?: boolean;
+  required?: boolean | undefined;
+  type?: string | undefined;
+  inputMode?: "tel" | "text" | undefined;
+  disabled?: boolean | undefined;
 }) {
   return (
     <label className="block">
