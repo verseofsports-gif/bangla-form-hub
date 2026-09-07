@@ -12,33 +12,65 @@ const optionalText = (max: number) =>
     .optional()
     .transform((v) => (v && v.length > 0 ? v : null));
 
-export const submissionSchema = z.object({
-  name: z.string().trim().min(1).max(120),
-  address: optionalText(300),
-  phone: z.string().trim().min(6).max(30),
-  email: z.string().trim().email().max(200),
-  nationality: optionalText(80),
-  date_of_birth: z
-    .string()
-    .trim()
-    .regex(/^\d{4}-\d{2}-\d{2}$/)
-    .optional()
-    .or(z.literal(""))
-    .transform((v) => (v && v.length > 0 ? v : null)),
-  mobile: z.string().trim().min(6).max(30),
-  whatsapp: optionalText(30),
-  profession: optionalText(120),
-  present_address: optionalText(300),
-  permanent_address: optionalText(300),
-  division: optionalText(60),
-  additional_information: optionalText(2000),
-  message: optionalText(2000),
-  consent: z.literal(true),
-});
+const requiredText = (max: number, message: string) =>
+  z.string().trim().min(1, message).max(max);
+
+export const THANA_OPTIONS = ["কেরানীগঞ্জ", "দোহার", "নবাবগঞ্জ"] as const;
+export const DISTRICT_OPTIONS = ["ঢাকা"] as const;
+
+const thanaSchema = z.enum(THANA_OPTIONS, { message: "থানা/উপজেলা নির্বাচন করুন" });
+const districtSchema = z.enum(DISTRICT_OPTIONS, { message: "জেলা নির্বাচন করুন" });
+
+const yesNoSchema = z
+  .enum(["", "হ্যাঁ", "না"])
+  .optional()
+  .transform((v) => (v && v.length > 0 ? v : null));
+
+export const submissionSchema = z
+  .object({
+    name: requiredText(120, "নাম লিখুন"),
+    father_name: optionalText(120),
+    institution: requiredText(200, "শিক্ষা প্রতিষ্ঠানের নাম লিখুন"),
+    class_level: requiredText(80, "ক্লাস/শ্রেণি/বর্ষ লিখুন"),
+    subject: requiredText(120, "বিষয়/বিভাগ লিখুন"),
+    religion: optionalText(40),
+    mobile: requiredText(30, "মোবাইল নম্বর লিখুন"),
+    whatsapp: optionalText(30),
+    email: z
+      .string()
+      .trim()
+      .max(200)
+      .optional()
+      .refine((v) => !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), "সঠিক ইমেইল এড্রেস লিখুন")
+      .transform((v) => (v && v.length > 0 ? v : null)),
+    facebook: optionalText(200),
+    present_address: requiredText(500, "বর্তমান ঠিকানা লিখুন"),
+    present_area: requiredText(200, "পাড়া/মহল্লা লিখুন"),
+    present_thana: thanaSchema,
+    present_district: districtSchema,
+    permanent_area: optionalText(200),
+    permanent_thana: z
+      .enum(["", ...THANA_OPTIONS])
+      .optional()
+      .transform((v) => (v && v.length > 0 ? v : null)),
+    permanent_district: z
+      .enum(["", ...DISTRICT_OPTIONS])
+      .optional()
+      .transform((v) => (v && v.length > 0 ? v : null)),
+    reason: optionalText(2000),
+    participated_before: yesNoSchema,
+    join_org: yesNoSchema,
+  })
+  .strict();
 
 export type SubmissionInput = z.input<typeof submissionSchema>;
 
 export type SubmissionRow = Database["public"]["Tables"]["submissions"]["Row"];
+
+function composeAddress(area: string | null, thana: string | null, district: string | null) {
+  const parts = [area, thana, district].filter((p): p is string => !!p && p.length > 0);
+  return parts.length > 0 ? parts.join(", ") : null;
+}
 
 function serverPublicClient() {
   const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
