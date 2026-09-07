@@ -282,7 +282,7 @@ function AdminPage() {
   );
 }
 
-function Stat({ label, value }: { label: string; value?: number }) {
+function Stat({ label, value }: { label: string; value?: number | undefined }) {
   return (
     <div className="border border-border bg-card px-4 py-3">
       <p className="text-xs text-muted-foreground">{label}</p>
