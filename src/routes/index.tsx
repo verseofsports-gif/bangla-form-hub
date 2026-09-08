@@ -128,8 +128,8 @@ function SupporterForm() {
             স
           </div>
           <div className="mr-auto">
-            <p className="font-serif text-lg leading-tight sm:text-xl">সমর্থক নিবন্ধন কেন্দ্র</p>
-            <p className="text-xs text-muted-foreground">তথ্য জমাদান সেবা</p>
+            <p className="font-serif text-lg leading-tight sm:text-xl">বাংলাদেশ ইসলামী ছাত্রশিবির</p>
+            <p className="text-xs text-muted-foreground">ঢাকা জেলা দক্ষিণ</p>
           </div>
           <p className="text-xs text-muted-foreground sm:text-sm">যোগাযোগ: ০১৭০০-০০০০০০</p>
         </div>
