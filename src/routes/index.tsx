@@ -7,6 +7,7 @@ import {
   THANA_OPTIONS,
   DISTRICT_OPTIONS,
 } from "@/lib/submissions.functions";
+import { ShibirLogo } from "@/components/ShibirLogo";
 
 export const Route = createFileRoute("/")({
   head: () => ({
