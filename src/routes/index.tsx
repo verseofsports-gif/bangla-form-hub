@@ -125,9 +125,7 @@ function SupporterForm() {
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border bg-card">
         <div className="mx-auto flex w-full max-w-[980px] flex-wrap items-center gap-3 px-4 py-3">
-          <div className="flex size-10 items-center justify-center rounded-sm bg-primary font-serif text-lg text-primary-foreground">
-            স
-          </div>
+          <ShibirLogo className="size-12 shrink-0" />
           <div className="mr-auto">
             <p className="font-serif text-lg leading-tight sm:text-xl">বাংলাদেশ ইসলামী ছাত্রশিবির</p>
             <p className="text-xs text-muted-foreground">ঢাকা জেলা দক্ষিণ</p>
